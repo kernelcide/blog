@@ -1,4 +1,4 @@
-site_name: obsidian-mkdocs template
+site_name: Kernelcide Blog
 
 theme:
     name: 'material'
@@ -25,25 +25,31 @@ theme:
 # Extensions
 markdown_extensions:
   - footnotes
-  # - attr_list
+  - attr_list
+  - md_in_html
   - pymdownx.arithmatex:
       generic: true
-  # - pymdownx.superfences
-  # - pymdownx.details
-  # - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.magiclink
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - def_list
+  - pymdownx.snippets
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
   - pymdownx.critic
   - pymdownx.caret
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
 
   - toc:
       permalink: true
