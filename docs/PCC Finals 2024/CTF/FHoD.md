@@ -156,7 +156,6 @@ This is the program in action
 ![[Pasted image 20241121034348.png]]
 
 # Exploitation
-
 First I figured since we had a write on the `FILE` object, we could use it to write to a soft link we had write permissions on and modify the file path it points to. This way we could possibly circumvent the check against open files with the string "flag" in their name. This approach, however, was quickly discarded because of three main reasons: 
 - `fopen` always follows soft links. We can't write to the link file itself since we always get a handle to the actual file it points to
 - We need a file descriptor to write to the link but we only have a `FILE` handle instead
@@ -230,7 +229,8 @@ typedef struct _IO_FILE FILE;
 /*    196      |      20 */    char _unused2[20];
 ```
 
-We need to construct an `_IO_FILE` object so that the next write operation on it reads from an address instead and gives us its contents. Luckily, since PIE is disabled, we can read from a GOT address and leak an address from libc. I chose to leak the address of `printf`. This can be done by
+We need to construct an `_IO_FILE` object so that the next write operation on it reads from an address instead and gives us its contents. Luckily, since PIE is disabled, we can read from a GOT address and leak an address from libc. I chose to leak the address of `printf`. This can be done by  
+
 - Setting `_flags = 0xFBAD1800` which corresponds to  `_IO_MAGIC | _IO_IS_APPENDING | _IO_IS_CURRENTLY_PUTTING`. See [https://elixir.bootlin.com/glibc/glibc-2.40/source/libio/libio.h]
 - Setting `_IO_read_ptr`, `_IO_read_end` and `_IO_read_base` to the address of `printf` in GOT 
 - Setting `_IO_write_ptr` and `_IO_write_end` to the `address + 0x8` to specify end of read
