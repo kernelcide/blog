@@ -1,11 +1,9 @@
-# Obsidian Notes
+# Kernelcide
 
-Publish your public notes with MkDocs
+We are a team of researchers working on low-level exploitation and mitigation techniques. We also play CTFs on the side. This blog is a combination of our CTF playthroughs and our research
 
-## Hello World!
+## stdnoerr
+:fontawesome-brands-twitter: [nofilq](https://x.com/nofilq) &emsp; :fontawesome-brands-github-alt: [papadoxie](https://github.com/papadoxie) &emsp; :fontawesome-brands-linkedin: [nofil-qasim](https://linkedin.com/in/nofil-qasim)
 
-The `index.md` in the `/docs` folder is the homepage you see here.
-
-The folders in `/docs` appear as the main sections on the navigation bar.
-
-The notes appear as pages within these sections. For example, [[Note 1]] in `Topic 1`
+## papadoxie
+:fontawesome-brands-twitter: [nofilq](https://x.com/nofilq) &emsp; :fontawesome-brands-github-alt: [papadoxie](https://github.com/papadoxie) &emsp; :fontawesome-brands-linkedin: [nofil-qasim](https://linkedin.com/in/nofil-qasim)
