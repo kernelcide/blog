@@ -1,6 +1,6 @@
 The first PWN challenge we faced was titled "File Handling on Demand". The description stated that it was a custom file handling server but that it had been tested thoroughly and shouldn't have any bugs.  
 
-# Analysis
+## Analysis
 A zip file was provided with the following contents  
 ![[Pasted image 20241120234631.png]]
 
@@ -155,7 +155,7 @@ We can see we aren't allowed to open the flag file directly. That will have to b
 This is the program in action  
 ![[Pasted image 20241121034348.png]]
 
-# Exploitation
+## Exploitation
 First I figured since we had a write on the `FILE` object, we could use it to write to a soft link we had write permissions on and modify the file path it points to. This way we could possibly circumvent the check against open files with the string "flag" in their name. This approach, however, was quickly discarded because of three main reasons: 
 - `fopen` always follows soft links. We can't write to the link file itself since we always get a handle to the actual file it points to
 - We need a file descriptor to write to the link but we only have a `FILE` handle instead
@@ -238,7 +238,7 @@ We need to construct an `_IO_FILE` object so that the next write operation on it
 
 The next call to `_IO_write` leaks the address of `printf` in libc to `stdout` and then we can calculate the base address of libc from there. Once we have the libc leak we perform the next FSOP attack which is called "House of Apple 2"
 
-# Final Exploit 
+## Final Exploit 
 ```python title="exploit.py" linenums="1"
 #!/usr/bin/env python3
 from pwn import *
@@ -326,5 +326,5 @@ if __name__ == '__main__':
     main()
 ```
 
-## Running the Exploit
+### Running the Exploit
 ![[Pasted image 20241121044550.png]]
