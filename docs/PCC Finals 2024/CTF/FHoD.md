@@ -157,6 +157,7 @@ This is the program in action
 
 ## Exploitation
 First I figured since we had a write on the `FILE` object, we could use it to write to a soft link we had write permissions on and modify the file path it points to. This way we could possibly circumvent the check against open files with the string "flag" in their name. This approach, however, was quickly discarded because of three main reasons:  
+
 - `fopen` always follows soft links. We can't write to the link file itself since we always get a handle to the actual file it points to
 - We need a file descriptor to write to the link but we only have a `FILE` handle instead
 - We don't have any normal method of reading the file contents even after opening the file because the `_IO_read_` method doesn't display the contents of the file and there is no other function that prints out the `content` variable in `_CUSTOM_IO_FILE_`
@@ -230,6 +231,7 @@ typedef struct _IO_FILE FILE;
 ```
 
 We need to construct an `_IO_FILE` object so that the next write operation on it reads from an address instead and gives us its contents. Luckily, since PIE is disabled, we can read from a GOT address and leak an address from libc. I chose to leak the address of `printf`. This can be done by  
+
 - Setting `_flags = 0xFBAD1800` which corresponds to  `_IO_MAGIC | _IO_IS_APPENDING | _IO_IS_CURRENTLY_PUTTING`. See [https://elixir.bootlin.com/glibc/glibc-2.40/source/libio/libio.h]
 - Setting `_IO_read_ptr`, `_IO_read_end` and `_IO_read_base` to the address of `printf` in GOT 
 - Setting `_IO_write_ptr` and `_IO_write_end` to the `address + 0x8` to specify end of read
