@@ -93,7 +93,7 @@ The address at the end is `setvbuf`. Now we have libc base and just need to perf
 I did a simple `ret2libc` attack to execute `system` function
 
 ### Final Exploit
-```py
+```python
 #!/usr/bin/env python3
 from pwn import *
 

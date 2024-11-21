@@ -206,7 +206,7 @@ As it can be seen, the program is writing the second long value to the first lon
 Now, I use the write-what-where to overwrite free hook with system and selected the third option to execute free on the buffer and I got the shell.
 
 ### Final exploit
-```py
+```python
 #!/usr/bin/env python3
 from pwn import *
 

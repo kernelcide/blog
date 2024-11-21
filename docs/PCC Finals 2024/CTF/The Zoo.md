@@ -383,7 +383,7 @@ Since the libc is latest and all objects are of sizes (mentioned in comments of 
 Since we could only print animals, Animal had to be one of the types. I chose Zoo as the first type and Animal as the second, because Zoo had either a function address or a stack address and that would give me a few leaks.
 
 I used the following code to perform this:
-```py
+```python
 # Get binary leak by overlapping animal with a deleted zoo
 Z1 = create_zoo("Z1")
 delete_zoo(Z1)
@@ -399,7 +399,7 @@ print(hex(elf.address))
 Now if you were to choose Zoo as the first type and Animal as the second, you could overwrite Animal's name address and then when print the animal, it will print the contents of that address. This gives as an arbitrary read. But it will only read the contents until a null-byte is found because the name is printed via `printf` using `%s`.
 
 I used this primitive to read a GOT entry to get the libc leak. Using the following code:
-```py
+```python
 # Get libc leak by overlapping zoo with a delete animal (read GOT)
 A2 = create_animal("stdnoerr", 9999)
 delete_animal(A2)
@@ -417,7 +417,7 @@ Then I tried to overwrite the Zoo's `handler` with one-gadgets, none worked. I t
 
 I got the stack leak by reading the libc's `environ` symbol's value. At that time, I didn't notice the stack pointer in zoo's structure. Equipped with the stack leak and libc leak, I did a `ret2libc` attack to execute system.
 
-```py
+```python
 # Leak stack from libc environ (using previous technique)
 A3 = create_animal("stdnoerr", 9999)
 delete_animal(A3)
@@ -432,7 +432,7 @@ print(hex(stack_leak))
 
 To write the ROP chain on stack, I used the same confusion of Animal with a zoo. We could only write `24` (0x18) bytes this way because names are limited to `24` bytes. When I executed the ROP chain, I got the infamous stack alignment error in system function. To circumvent this, I followed the execution of `system` function in gdb and skipped one of the push in the code by modifying the chain. The made the stack pointer aligned to `16` bytes and I got the flag.
 
-```py
+```python
 A3 = create_animal("stdnoerr", 9999)
 delete_animal(A3)
 
@@ -446,7 +446,7 @@ sendchoice(0)
 Side Note: The stack alignment error in system is caused by an instruction in the libc code that uses `XMM` registers. These registers are used to hold floating point values. There are of size `128`-bit. Because of this, they are used to perform fast copying of arguments (data) in libc code. These instructions require the stack pointer (`rsp`) to be a multiple of `16` (0x10). If that is not the case, it generates a SEGFAULT which halts the execution. The stack pointer becomes misaligned because we popped address of `/bin/sh` from the stack in the ROP chain.
 
 ### Final Exploit
-```py
+```python
 #!/usr/bin/env python3
 from pwn import *
 

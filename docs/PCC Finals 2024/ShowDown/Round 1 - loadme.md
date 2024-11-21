@@ -55,7 +55,7 @@ When 3 minutes and 29 seconds left, the third hint was released and it read some
 ### Exploit
 Here's the final exploit
 
-```py
+```python
 #!/usr/bin/env python3
 from pwn import *
 
